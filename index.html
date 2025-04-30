@@ -1,130 +1,172 @@
 <!DOCTYPE html>
-<html lang="en" x-data="{ tab: 'education', darkMode: false }" x-bind:class="{ 'dark': darkMode }" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio | Aerospace Engineer</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-  <style>
-    html {
-      scroll-behavior: smooth;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Aerospace Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+
+        .dark-mode {
+            background-color: #1a202c;
+            color: #f7fafc;
+        }
+
+        .light-mode {
+            background-color: #f7fafc;
+            color: #1a202c;
+        }
+
+        /* Custom Cursor */
+        .cursor-pointer {
+            cursor: url('https://example.com/custom-cursor.png'), auto;
+        }
+
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #FF6600;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 20px;
+        }
+
+        .floating-btn:hover {
+            background-color: #FF4500;
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 
-<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans">
-  <!-- Navbar -->
-  <header class="p-4 shadow-md bg-white dark:bg-gray-800 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold">Aerospace Portfolio</h1>
-      <div class="flex items-center gap-4">
-        <button class="hover:text-blue-500" x-on:click="tab = 'education'">Education</button>
-        <button class="hover:text-blue-500" x-on:click="tab = 'skills'">Skills</button>
-        <button class="hover:text-blue-500" x-on:click="tab = 'projects'">Projects</button>
-        <button class="hover:text-blue-500" x-on:click="tab = 'certifications'">Certifications</button>
-        <button class="hover:text-blue-500" x-on:click="tab = 'achievements'">Achievements</button>
-        <button class="hover:text-blue-500" x-on:click="tab = 'conference'">Conference</button>
-        <button x-on:click="darkMode = !darkMode" class="ml-4 p-1 rounded-full bg-gray-200 dark:bg-gray-700">
-          <span x-show="!darkMode">☀️</span>
-          <span x-show="darkMode">🌙</span>
-        </button>
-      </div>
+<body class="light-mode" x-data="{ darkMode: false, showGame: false, score: 0, answers: [] }" :class="darkMode ? 'dark-mode' : 'light-mode'">
+    <header class="p-4 fixed top-0 left-0 w-full z-50 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold cursor-pointer">Aerospace Portfolio</h1>
+            <div class="flex items-center gap-6">
+                <button class="hover:text-blue-500" @click="showGame = !showGame">
+                    Play Game
+                </button>
+                <button class="hover:text-blue-500" @click="darkMode = !darkMode">
+                    Toggle Dark Mode
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-20 max-w-7xl mx-auto p-8 space-y-16">
+        <!-- Education Section -->
+        <section>
+            <h2 class="text-3xl font-bold mb-4">Education</h2>
+            <div>
+                <h3 class="text-xl">Indian Institute of Technology Kharagpur</h3>
+                <p>M.Tech in Aerospace Engineering</p>
+                <p>CGPA: 7.55/10 | Coursework: Aerospace Structures, Flight Mechanics...</p>
+            </div>
+            <div>
+                <h3 class="text-xl">National Institute of Technology Silchar</h3>
+                <p>B.Tech in Mechanical Engineering</p>
+                <p>CGPA: 7.88/10 | Coursework: Strength of Materials, Fluid Mechanics...</p>
+            </div>
+            <div>
+                <h3 class="text-xl">Sant Tukaram National Model School, Latur</h3>
+                <p>HSC | Percentage: 78.80%</p>
+            </div>
+        </section>
+
+        <!-- Mini-game Section -->
+        <section x-show="showGame">
+            <h2 class="text-3xl font-bold mb-4">Space Quiz Game</h2>
+            <div x-show="answers.length === 0">
+                <button @click="startGame" class="btn bg-blue-500 text-white p-2 rounded hover:bg-blue-700 transition">Start Game</button>
+            </div>
+
+            <div x-show="answers.length > 0" x-cloak>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-semibold">Q1: What year did humans land on the moon?</h3>
+                        <button @click="answerQuestion('1969')" class="btn bg-green-500 text-white p-2 rounded hover:bg-green-700 transition">1969</button>
+                        <button @click="answerQuestion('1989')" class="btn bg-red-500 text-white p-2 rounded hover:bg-red-700 transition">1989</button>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold">Q2: Who was the first person to walk on the moon?</h3>
+                        <button @click="answerQuestion('Neil Armstrong')" class="btn bg-green-500 text-white p-2 rounded hover:bg-green-700 transition">Neil Armstrong</button>
+                        <button @click="answerQuestion('Buzz Aldrin')" class="btn bg-red-500 text-white p-2 rounded hover:bg-red-700 transition">Buzz Aldrin</button>
+                    </div>
+                    <!-- Add more questions as needed -->
+                </div>
+                <div x-show="score >= 0" class="mt-4">
+                    <h4>Your Score: <span x-text="score"></span></h4>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section>
+            <h2 class="text-3xl font-bold mb-4">Skills</h2>
+            <ul>
+                <li><strong>Programming:</strong> C++, Python, SQL</li>
+                <li><strong>CAD:</strong> SolidWorks, NX, Creo, Onshape</li>
+                <li><strong>CAE:</strong> ANSYS, ABAQUS, HyperWorks, NASTRAN</li>
+                <li><strong>Aerospace Design:</strong> XFLR5, OpenVSP, FlightGear</li>
+                <li><strong>Simulations:</strong> MATLAB, Simulink</li>
+            </ul>
+        </section>
+
+        <!-- Achievements Section -->
+        <section>
+            <h2 class="text-3xl font-bold mb-4">Achievements</h2>
+            <ul>
+                <li>Secured All India Rank 74 in GATE Aerospace Engineering (2025) with a score of 671.</li>
+                <li>Achieved 2nd place in Hydrorocketry Competition at Technoesis 2020, NIT Silchar.</li>
+            </ul>
+        </section>
+
+        <!-- Conferences Section -->
+        <section>
+            <h2 class="text-3xl font-bold mb-4">Conferences</h2>
+            <div>
+                <h3>Development of Space Startup Ecosystem in India</h3>
+                <p>Attended a national conference hosted by the Astronautical Society of India in Bengaluru.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Action Button -->
+    <div class="floating-btn cursor-pointer" @click="darkMode = !darkMode">
+        <span x-show="!darkMode">☀️</span>
+        <span x-show="darkMode">🌙</span>
     </div>
-  </header>
 
-  <!-- Main Content -->
-  <main class="max-w-5xl mx-auto py-8 px-4 space-y-12">
-    <!-- Education Section -->
-    <section x-show="tab === 'education'">
-      <h2 class="text-3xl font-semibold mb-6">Education</h2>
-      <div class="space-y-4">
-        <div>
-          <h3 class="text-xl font-bold">Indian Institute of Technology Kharagpur (2023 - Present)</h3>
-          <p>M.Tech in Aerospace Engineering | CGPA: 7.55 / 10 | 72%</p>
-          <p><strong>Coursework:</strong> Aerospace Structures, Flight Mechanics, Advanced Propulsion Systems...</p>
-        </div>
-        <div>
-          <h3 class="text-xl font-bold">National Institute of Technology Silchar (2019 - 2023)</h3>
-          <p>B.Tech in Mechanical Engineering | CGPA: 7.88 / 10 | 78.80%</p>
-          <p><strong>Coursework:</strong> Strength of Materials, Fluid Mechanics, CNC...</p>
-        </div>
-        <div>
-          <h3 class="text-xl font-bold">HSC - Sant Tukaram National Model School (2017 - 2018)</h3>
-          <p>Percentage: 78.80%</p>
-        </div>
-        <div>
-          <h3 class="text-xl font-bold">SSC - Yeshwant Vidyalaya (2015 - 2016)</h3>
-          <p>Percentage: 94.60%</p>
-        </div>
-      </div>
-    </section>
+    <script>
+        function startGame() {
+            this.answers = [
+                { question: 'What year did humans land on the moon?', correctAnswer: '1969', userAnswer: '' },
+                { question: 'Who was the first person to walk on the moon?', correctAnswer: 'Neil Armstrong', userAnswer: '' }
+            ];
+            this.score = 0;
+        }
 
-    <!-- Skills Section -->
-    <section x-show="tab === 'skills'">
-      <h2 class="text-3xl font-semibold mb-6">Skills</h2>
-      <ul class="list-disc list-inside space-y-2">
-        <li><strong>Languages:</strong> C++, C, SQL, Python</li>
-        <li><strong>CAD:</strong> SolidWorks, Creo, NX, Onshape, Inspire</li>
-        <li><strong>CAE:</strong> ABAQUS, ANSYS, HyperWorks, NASTRAN...</li>
-        <li><strong>Aerospace Tools:</strong> XFLR5, OpenVSP, NASA-CEA</li>
-        <li><strong>Simulations:</strong> MATLAB, Simulink, MatCont</li>
-      </ul>
-    </section>
-
-    <!-- Projects Section -->
-    <section x-show="tab === 'projects'">
-      <h2 class="text-3xl font-semibold mb-6">Projects</h2>
-      <div class="space-y-4">
-        <div>
-          <h3 class="text-xl font-bold">Hygrothermal Effects in Fatigue Estimation</h3>
-          <p>Used ABAQUS, ANSYS, FLife, and APDL for advanced fatigue life prediction.</p>
-        </div>
-        <div>
-          <h3 class="text-xl font-bold">Land Use and Cover Analysis</h3>
-          <p>GIS-based classification using QGIS and Sentinel imagery.</p>
-        </div>
-        <div>
-          <h3 class="text-xl font-bold">MIG Welded Martensitic Steel Study</h3>
-          <p>Metallographic analysis and mechanical testing of weld joints.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Certifications Section -->
-    <section x-show="tab === 'certifications'">
-      <h2 class="text-3xl font-semibold mb-6">Certifications</h2>
-      <ul class="list-disc list-inside">
-        <li>Inspire Structures - <a href="https://learn.altair.com" class="text-blue-400">View Credential</a></li>
-        <li>HyperWorks for Aerostructures - <a href="https://github.com/prathm00/Certificates" class="text-blue-400">View Certificate</a></li>
-        <li>C Programmer (MKCL)</li>
-      </ul>
-    </section>
-
-    <!-- Achievements Section -->
-    <section x-show="tab === 'achievements'">
-      <h2 class="text-3xl font-semibold mb-6">Achievements</h2>
-      <ul class="list-disc list-inside">
-        <li>AIR 74 - GATE Aerospace Engineering 2025 (Score: 671)</li>
-        <li>2nd Place - Hydrorocketry, Technoesis 2020 @ NIT Silchar</li>
-      </ul>
-    </section>
-
-    <!-- Conference Section -->
-    <section x-show="tab === 'conference'">
-      <h2 class="text-3xl font-semibold mb-6">Conference</h2>
-      <div>
-        <h3 class="text-xl font-bold">Development of Space Startup Ecosystem in India (2022)</h3>
-        <p>Represented NIT Silchar at Astronautical Society of India’s national meet in Bengaluru.</p>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="bg-gray-100 dark:bg-gray-800 text-center py-6 mt-10">
-    <p>&copy; 2025 Aerospace Engineer Portfolio. Connect on <a href="https://github.com/prathm00" class="text-blue-500">GitHub</a></p>
-  </footer>
+        function answerQuestion(userAnswer) {
+            const currentQuestion = this.answers[0];
+            if (userAnswer === currentQuestion.correctAnswer) {
+                this.score++;
+            }
+            this.answers.shift(); // Remove the answered question
+        }
+    </script>
 </body>
 
 </html>
